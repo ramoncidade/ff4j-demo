@@ -1,0 +1,61 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.13.RELEASE'
+	}
+	repositories {
+		maven {
+			url 'http://ci.tapaburaco.com.br/artifactory/maven-repo'
+			credentials {
+				username "$artifactoryUser"
+				password "$artifactoryPass"
+			}
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.grupopan'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	maven {
+		url 'http://ci.tapaburaco.com.br/artifactory/maven-repo'
+		credentials {
+			username "$artifactoryUser"
+			password "$artifactoryPass"
+		}
+	}
+}
+
+
+ext {
+	springCloudVersion = 'Edgware.SR3'
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compileOnly('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+    
+
+    compile group: 'org.ff4j', name: 'ff4j-core', version: '1.7.1'
+    compile group: 'org.ff4j', name: 'ff4j-webapi-jersey2x', version: '1.7.1'
+    compile group: 'org.ff4j', name: 'ff4j-web', version: '1.7.1'
+    
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
